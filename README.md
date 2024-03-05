@@ -20,27 +20,9 @@ Implementation using Python code
 Testing the server and client 
 
 ## PROGRAM:
-## SERVER CODE
-## echo server.py
-```
-import socket
-HOST = "127.0.0.1"  # Standard loopback interface address (localhost)
-PORT = 65432  # Port to listen on (non-privileged ports are > 1023)
-with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-    s.bind((HOST, PORT))
-    s.listen()
-    conn, addr = s.accept()
-    with conn:
-        print(f"Connected by {addr}")
-        while True:
-            data = conn.recv(1024)
-            if not data:
-                break
-            conn.sendall(data)
-```
-## Client Code:
-## echo-client.py:
-```
+
+### SERVER SIDE
+```python
 import socket
 HOST = "127.0.0.1"  # The server's hostname or IP address
 PORT = 65432  # The port used by the server
@@ -51,11 +33,50 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
 print(f"Received {data!r}")
 ```
 
+
+### CLIENT SIDE 
+```python
+import socket
+HOST = "127.0.0.1"  # Standard loopback interface address (localhost)
+PORT = 65432  # Port to listen on (non-privileged ports are > 1023)
+with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+    try:
+        s.bind((HOST, PORT))
+    except Exception as e:
+        print(f"Error binding to {HOST}:{PORT}: {e}")
+        exit()
+    s.listen()
+    print(f"Listening on {HOST}:{PORT}...")
+    try:
+        conn, addr = s.accept()
+    except Exception as e:
+        print(f"Error accepting connection: {e}")
+        exit()
+    with conn:
+        print(f"Connected by {addr}")
+        while True:
+            try:
+                data = conn.recv(1024)
+                if not data:
+                    break
+                conn.sendall(data)
+            except Exception as e:
+                print(f"Error receiving/sending data: {e}")
+                exit()
+
+```
 ## OUTPUT:
-## SERVER OUTPUT:
-![image](https://github.com/Bakkiyalakshmi29/Echoserver/assets/119406233/756ae2c2-dc29-4dc2-972b-e01ed1380968)
-## CLIENT OUTPUT:
-![image](https://github.com/Bakkiyalakshmi29/Echoserver/assets/119406233/9c55de50-9b36-49d2-aee2-cccda61585dc)
+
+### SERVER SIDE 
+
+![image](https://github.com/Aashima02/Echoserver/assets/93427086/98afebaf-7746-49e6-942a-7035cc0dfe59)
+
+
+### CLIENT SIDE 
+![image](https://github.com/Aashima02/Echoserver/assets/93427086/cf66589d-d2b9-49d6-9463-e8ce1834bd87)
+
+
+
 
 ## RESULT:
 The program is executed successfully
